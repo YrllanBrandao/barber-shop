@@ -28,5 +28,9 @@ Router.post("/role", async(req:any,res:any)=>{
     const role = new Role();
     role.create(req, res);
 })
+Router.put("/role/:id", async (req:any, res:any) =>{
+    const role = new Role();
+    role.update(req, res);
+})
 
 export default Router;

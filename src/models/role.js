@@ -30,6 +30,21 @@ class Role {
                 res.status(400).send(error.sqlMessage);
             }
         });
+        this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params.id;
+                const { roleName } = req.body;
+                if (!roleName) {
+                    res.status(400).send("The fild roleName was empty");
+                }
+                yield (0, connection_1.default)("roles").update({ role_name: roleName }).where({ id });
+                res.status(200).send('The fild role_name was updated!');
+            }
+            catch (error) {
+                console.table(error);
+                res.status(400).send(error.sqlMessage);
+            }
+        });
     }
 }
 exports.default = Role;
