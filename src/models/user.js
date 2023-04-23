@@ -33,7 +33,23 @@ class User {
                 res.status(201).send("user created sucessfully!");
             }
             catch (error) {
-                res.status(400).send(error.sqlMessage);
+                res.sendStatus(400).send(error.sqlMessage);
+            }
+        });
+        this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params;
+                const USER_DATA = req.body;
+                const query = yield (0, connection_1.default)('users').select(['email']).where(id);
+                if (query.length === 0) {
+                    res.status(404).send("the user doesn't exists!");
+                }
+                console.table(USER_DATA);
+                const result = yield (0, connection_1.default)('users').update(USER_DATA).where(id);
+                res.sendStatus(200).send(result);
+            }
+            catch (error) {
+                console.log(error);
             }
         });
         this.findAll = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -43,6 +59,16 @@ class User {
             }
             catch (error) {
                 res.status(400).send(error.sqlMessage);
+            }
+        });
+        this.findById = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params.id;
+                const query = yield (0, connection_1.default)('users').where({ id });
+                res.sendStatus(200).send(query);
+            }
+            catch (error) {
+                res.sendStatus(error).send(error.sqlMessage);
             }
         });
     }

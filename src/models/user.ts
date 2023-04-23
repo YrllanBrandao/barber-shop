@@ -4,7 +4,6 @@ import HashPassword from '../../public/javascript/hashPassword';
 
 
 interface intefaceUser{
-    id?: number
     firstName: string,
     lastName: string,
     email: string,
@@ -12,7 +11,13 @@ interface intefaceUser{
     createdAt: string,
     updatedAt: string
 }
-
+interface intefaceUserUpdate{
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+    password?: string,
+    updatedAt: string
+}
 
 class User{
      create = async (req:any, res:any) =>{
@@ -35,7 +40,32 @@ class User{
             }
         catch(error:any){
        
-           res.status(400).send(error.sqlMessage);
+           res.sendStatus(400).send(error.sqlMessage);
+        }
+    }
+    update = async (req:any, res:any) =>{
+
+        
+      
+        try{
+            const id:number = req.params;
+            const USER_DATA:intefaceUserUpdate = req.body;
+            const query:any = await connection('users').select(['email']).where(id);
+
+            if(query.length === 0)
+            {
+                res.status(404).send("the user doesn't exists!");
+            }
+
+
+            console.table(USER_DATA);
+            const result:any =  await connection('users').update(USER_DATA).where(id);
+
+           res.sendStatus(200).send(result);
+        }
+        catch(error)
+        {
+            console.log(error);
         }
     }
 
@@ -52,6 +82,22 @@ class User{
             res.status(400).send(error.sqlMessage);
         }
     }
+  
+    findById = async (req:any, res:any) =>{
+        try{
+            const id:number  = req.params.id;
+
+            const query = await connection('users').where({id});
+
+            res.sendStatus(200).send(query);
+        }
+        catch(error:any)
+        {
+            res.sendStatus(error).send(error.sqlMessage)
+        }
+    }
+
+
 
 
 

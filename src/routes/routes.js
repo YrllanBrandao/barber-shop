@@ -23,4 +23,12 @@ Router.get("/user", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const user = new user_1.default();
     user.findAll(req, res);
 }));
+Router.get("/user/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = new user_1.default();
+    user.findById(req, res);
+}));
+Router.put("/user/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = new user_1.default();
+    user.update(req, res);
+}));
 exports.default = Router;
