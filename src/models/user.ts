@@ -2,7 +2,6 @@ import connection from '../database/connection';
 import getCurrentDate from '../../public/javascript/getCurrentDate';
 import HashPassword from '../../public/javascript/hashPassword';
 
-
 interface intefaceUser{
     firstName: string,
     lastName: string,
@@ -25,7 +24,7 @@ class User{
         try {
             
 
-            const {firstName, lastName, email, password} = req.body;
+            const {firstName, lastName, email, password, roleId} = req.body;
             const CURRENT_DATE = getCurrentDate();
             const REGISTER:intefaceUser = {
                 firstName,
@@ -35,7 +34,14 @@ class User{
                 createdAt: CURRENT_DATE,
                 updatedAt: CURRENT_DATE
             }
-             await connection("users").insert(REGISTER);
+             const USER_ID:any = await connection("users").insert(REGISTER);
+
+                //  adding user role
+            await connection('user_role').insert({
+                user_id: USER_ID[0],
+                role_id: roleId
+            });
+
                 res.status(201).send("user created sucessfully!");
             }
         catch(error:any){
@@ -46,7 +52,6 @@ class User{
     update = async (req:any, res:any) =>{
 
         
-      
         try{
             const id:number = req.params;
             const USER_DATA:intefaceUserUpdate = req.body;
@@ -57,15 +62,13 @@ class User{
                 res.status(404).send("the user doesn't exists!");
             }
 
-
-            console.table(USER_DATA);
-            const result:any =  await connection('users').update(USER_DATA).where(id);
+            const result:any =  await connection('users').update({...USER_DATA, updatedAt: getCurrentDate()}).where(id);
 
            res.sendStatus(200).send(result);
         }
-        catch(error)
+        catch(error:any)
         {
-            console.log(error);
+            res.status(400).send(error.sqlMessage);
         }
     }
 
@@ -74,8 +77,6 @@ class User{
            const USERS:any = await connection('users').select('*');
 
            res.status(200).json(USERS);
-
-
         }
         catch(error:any)
         {

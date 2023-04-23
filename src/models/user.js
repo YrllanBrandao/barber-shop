@@ -19,7 +19,7 @@ class User {
     constructor() {
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { firstName, lastName, email, password } = req.body;
+                const { firstName, lastName, email, password, roleId } = req.body;
                 const CURRENT_DATE = (0, getCurrentDate_1.default)();
                 const REGISTER = {
                     firstName,
@@ -29,7 +29,12 @@ class User {
                     createdAt: CURRENT_DATE,
                     updatedAt: CURRENT_DATE
                 };
-                yield (0, connection_1.default)("users").insert(REGISTER);
+                const USER_ID = yield (0, connection_1.default)("users").insert(REGISTER);
+                //  adding user role
+                yield (0, connection_1.default)('user_role').insert({
+                    user_id: USER_ID[0],
+                    role_id: roleId
+                });
                 res.status(201).send("user created sucessfully!");
             }
             catch (error) {
@@ -44,12 +49,11 @@ class User {
                 if (query.length === 0) {
                     res.status(404).send("the user doesn't exists!");
                 }
-                console.table(USER_DATA);
-                const result = yield (0, connection_1.default)('users').update(USER_DATA).where(id);
+                const result = yield (0, connection_1.default)('users').update(Object.assign(Object.assign({}, USER_DATA), { updatedAt: (0, getCurrentDate_1.default)() })).where(id);
                 res.sendStatus(200).send(result);
             }
             catch (error) {
-                console.log(error);
+                res.status(400).send(error.sqlMessage);
             }
         });
         this.findAll = (req, res) => __awaiter(this, void 0, void 0, function* () {

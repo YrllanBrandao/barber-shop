@@ -14,7 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("../models/user"));
+const role_1 = __importDefault(require("../models/role"));
+const adminAuth_1 = __importDefault(require("../middleware/adminAuth"));
 const Router = express_1.default.Router();
+// user routes
 Router.post("/user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = new user_1.default();
     user.create(req, res);
@@ -27,8 +30,13 @@ Router.get("/user/:id", (req, res) => __awaiter(void 0, void 0, void 0, function
     const user = new user_1.default();
     user.findById(req, res);
 }));
-Router.put("/user/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+Router.put("/user/:id", adminAuth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = new user_1.default();
     user.update(req, res);
+}));
+// role routes
+Router.post("/role", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const role = new role_1.default();
+    role.create(req, res);
 }));
 exports.default = Router;
