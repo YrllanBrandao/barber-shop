@@ -17,13 +17,10 @@ const user_1 = __importDefault(require("../models/user"));
 const Router = express_1.default.Router();
 Router.post("/user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = new user_1.default();
-    console.log("i'm here");
-    try {
-        yield user.create(req, res);
-        res.status(201).send("User created sucessfully!");
-    }
-    catch (err) {
-        res.status(400).send(err.message);
-    }
+    user.create(req, res);
+}));
+Router.get("/user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = new user_1.default();
+    user.findAll(req, res);
 }));
 exports.default = Router;

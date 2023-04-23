@@ -6,17 +6,11 @@ const Router= express.Router();
 
 Router.post("/user", async (req:any, res:any) =>{
     const user = new User();
-
-    console.log("i'm here")
-
-    try {
-        await user.create(req, res);
-        res.status(201).send("User created sucessfully!");
-    }
-    catch(err:any)
-    {
-        res.status(400).send(err.message);
-    }
+    user.create(req, res);
+});
+Router.get("/user", async(req:any, res:any) =>{
+    const user = new User();
+    user.findAll(req, res);
 });
 
 export default Router;
