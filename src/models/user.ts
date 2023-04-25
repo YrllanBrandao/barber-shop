@@ -45,7 +45,6 @@ class User{
                 res.status(201).send("user created sucessfully!");
             }
         catch(error:any){
-       
            res.sendStatus(400).send(error.sqlMessage);
         }
     }
@@ -68,6 +67,7 @@ class User{
         }
         catch(error:any)
         {
+    
             res.status(400).send(error.sqlMessage);
         }
     }

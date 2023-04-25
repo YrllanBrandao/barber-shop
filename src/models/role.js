@@ -13,11 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const connection_1 = __importDefault(require("../database/connection"));
+const getCurrentDate_1 = __importDefault(require("../../public/javascript/getCurrentDate"));
 class Role {
     constructor() {
+        this.checkRole = (id) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield (0, connection_1.default)("roles").select().where({ id });
+                if (result[0] === undefined) {
+                    return false;
+                }
+                return true;
+            }
+            catch (error) {
+                return error;
+            }
+        });
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { roleName } = req.body;
+                const { roleName } = yield req.body;
                 if (!roleName) {
                     res.sendStatus(400);
                 }
@@ -33,15 +46,33 @@ class Role {
         this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = req.params.id;
-                const { roleName } = req.body;
+                const { roleName } = yield req.body;
+                const newRole = {
+                    id,
+                    role_name: roleName,
+                    updatedAt: (0, getCurrentDate_1.default)()
+                };
                 if (!roleName) {
                     res.status(400).send("The fild roleName was empty");
                 }
-                yield (0, connection_1.default)("roles").update({ role_name: roleName }).where({ id });
+                yield (0, connection_1.default)("roles").update(newRole).where({ id });
                 res.status(200).send('The fild role_name was updated!');
             }
             catch (error) {
-                console.table(error);
+                res.status(400).send(error.sqlMessage);
+            }
+        });
+        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            const roleExist = yield this.checkRole(id);
+            if (!roleExist) {
+                res.status(404).send("The role doesn't exist");
+            }
+            try {
+                yield (0, connection_1.default)("roles").delete("*").where({ id });
+                res.status(200).send("role deleted!");
+            }
+            catch (error) {
                 res.status(400).send(error.sqlMessage);
             }
         });

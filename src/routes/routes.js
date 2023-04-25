@@ -43,4 +43,8 @@ Router.put("/role/:id", (req, res) => __awaiter(void 0, void 0, void 0, function
     const role = new role_1.default();
     role.update(req, res);
 }));
+Router.delete("/role/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const role = new role_1.default();
+    role.delete(req, res);
+}));
 exports.default = Router;

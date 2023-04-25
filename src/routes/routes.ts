@@ -32,5 +32,9 @@ Router.put("/role/:id", async (req:any, res:any) =>{
     const role = new Role();
     role.update(req, res);
 })
+Router.delete("/role/:id", async(req, res) =>{
+    const role = new Role();
+    role.delete(req, res);
+})
 
 export default Router;
