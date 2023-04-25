@@ -43,6 +43,29 @@ class Role {
                 res.status(400).send(error.sqlMessage);
             }
         });
+        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            const roleExist = yield this.checkRole(id);
+            if (!roleExist) {
+                res.status(404).send("The role doesn't exist");
+            }
+            try {
+                yield (0, connection_1.default)("roles").delete("*").where({ id });
+                res.status(200).send("role deleted!");
+            }
+            catch (error) {
+                res.status(400).send(error.sqlMessage);
+            }
+        });
+        this.findAll = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const roles = yield (0, connection_1.default)("roles").select();
+                res.status(200).send(roles);
+            }
+            catch (error) {
+                res.status(400).send(error.sqlMessage);
+            }
+        });
         this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = req.params.id;
@@ -57,20 +80,6 @@ class Role {
                 }
                 yield (0, connection_1.default)("roles").update(newRole).where({ id });
                 res.status(200).send('The fild role_name was updated!');
-            }
-            catch (error) {
-                res.status(400).send(error.sqlMessage);
-            }
-        });
-        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = req.params.id;
-            const roleExist = yield this.checkRole(id);
-            if (!roleExist) {
-                res.status(404).send("The role doesn't exist");
-            }
-            try {
-                yield (0, connection_1.default)("roles").delete("*").where({ id });
-                res.status(200).send("role deleted!");
             }
             catch (error) {
                 res.status(400).send(error.sqlMessage);

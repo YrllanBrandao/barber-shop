@@ -40,6 +40,36 @@ class Role{
             }
         }
         
+        delete = async(req:any, res:any) =>{
+            const id = req.params.id;
+
+
+            const roleExist = await this.checkRole(id);
+        
+            if(!roleExist)
+            {
+                 res.status(404).send("The role doesn't exist");
+             }
+            try{
+               await connection("roles").delete("*").where({id});
+                res.status(200).send("role deleted!")
+            }
+            catch(error:any)
+            {
+                res.status(400).send(error.sqlMessage);
+            }
+        }
+
+        findAll = async(req:any, res:any) =>{
+            try{
+                const roles = await connection("roles").select();
+                res.status(200).send(roles);
+            }
+            catch(error:any){
+                res.status(400).send(error.sqlMessage);
+            }
+        }
+
         update  = async (req:any, res:any) =>{
             try{
                 const id = req.params.id;
@@ -58,25 +88,6 @@ class Role{
                 await connection("roles").update(newRole).where({id});
 
                 res.status(200).send('The fild role_name was updated!');
-            }
-            catch(error:any)
-            {
-                res.status(400).send(error.sqlMessage);
-            }
-        }
-        delete = async(req:any, res:any) =>{
-            const id = req.params.id;
-
-
-            const roleExist = await this.checkRole(id);
-        
-            if(!roleExist)
-            {
-                 res.status(404).send("The role doesn't exist");
-             }
-            try{
-               await connection("roles").delete("*").where({id});
-                res.status(200).send("role deleted!")
             }
             catch(error:any)
             {

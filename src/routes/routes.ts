@@ -24,6 +24,10 @@ Router.put("/user/:id",adminAuth, async (req:any, res:any) =>{
 });
 // role routes
 
+Router.get("/roles", async(req:any, res:any) =>{
+    const role = new Role();
+    role.findAll(req, res);
+})
 Router.post("/role", async(req:any,res:any)=>{
     const role = new Role();
     role.create(req, res);
