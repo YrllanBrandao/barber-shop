@@ -16,7 +16,7 @@ const connection_1 = __importDefault(require("../database/connection"));
 const getCurrentDate_1 = __importDefault(require("../../public/javascript/getCurrentDate"));
 class Role {
     constructor() {
-        this.checkRole = (id) => __awaiter(this, void 0, void 0, function* () {
+        this._checkRole = (id) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield (0, connection_1.default)("roles").select().where({ id });
                 if (result[0] === undefined) {
@@ -45,7 +45,7 @@ class Role {
         });
         this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const roleExist = yield this.checkRole(id);
+            const roleExist = yield this._checkRole(id);
             if (!roleExist) {
                 res.status(404).send("The role doesn't exist");
             }

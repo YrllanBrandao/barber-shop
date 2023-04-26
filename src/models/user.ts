@@ -19,6 +19,23 @@ interface intefaceUserUpdate{
 }
 
 class User{
+    _checkUser = async(id:number) =>{
+        try{
+            const result = await connection("user").select().where({id});
+
+            if(result[0] === undefined)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        catch(erro:any)
+        {
+            return false;
+        }
+    }
      create = async (req:any, res:any) =>{
 
         try {

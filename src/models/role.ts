@@ -11,7 +11,7 @@ interface interfaceRole{
 class Role{
 
 
-        checkRole = async (id:number) =>{
+        _checkRole = async (id:number) =>{
 
             try{
                 const result:any = await connection("roles").select().where({id});
@@ -44,7 +44,7 @@ class Role{
             const id = req.params.id;
 
 
-            const roleExist = await this.checkRole(id);
+            const roleExist = await this._checkRole(id);
         
             if(!roleExist)
             {

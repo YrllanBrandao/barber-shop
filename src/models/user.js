@@ -17,6 +17,18 @@ const getCurrentDate_1 = __importDefault(require("../../public/javascript/getCur
 const hashPassword_1 = __importDefault(require("../../public/javascript/hashPassword"));
 class User {
     constructor() {
+        this._checkUser = (id) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield (0, connection_1.default)("user").select().where({ id });
+                if (result[0] === undefined) {
+                    return false;
+                }
+                return true;
+            }
+            catch (erro) {
+                return false;
+            }
+        });
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { firstName, lastName, email, password, roleId } = req.body;
