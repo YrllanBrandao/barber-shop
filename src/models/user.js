@@ -19,7 +19,7 @@ class User {
     constructor() {
         this._checkUser = (id) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, connection_1.default)("user").select().where({ id });
+                const result = yield (0, connection_1.default)("users").select().where({ id });
                 if (result[0] === undefined) {
                     return false;
                 }
@@ -63,6 +63,23 @@ class User {
                 }
                 const result = yield (0, connection_1.default)('users').update(Object.assign(Object.assign({}, USER_DATA), { updatedAt: (0, getCurrentDate_1.default)() })).where(id);
                 res.sendStatus(200).send(result);
+            }
+            catch (error) {
+                res.status(400).send(error.sqlMessage);
+            }
+        });
+        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params.id;
+                const userExist = yield this._checkUser(id);
+                if (userExist === false) {
+                    res.status(404).send("the user not exist");
+                }
+                // delete relashionship 
+                const result = yield (0, connection_1.default)("user_role").delete().where({ user_id: id });
+                // delete user
+                const query = yield (0, connection_1.default)("users").delete().where({ id });
+                res.status(200).send(`user deleted: ${query}`);
             }
             catch (error) {
                 res.status(400).send(error.sqlMessage);

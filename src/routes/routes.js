@@ -34,6 +34,10 @@ Router.put("/user/:id", adminAuth_1.default, (req, res) => __awaiter(void 0, voi
     const user = new user_1.default();
     user.update(req, res);
 }));
+Router.delete("/user/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = new user_1.default();
+    user.delete(req, res);
+}));
 // role routes
 Router.get("/roles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const role = new role_1.default();

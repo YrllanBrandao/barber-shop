@@ -21,7 +21,7 @@ interface intefaceUserUpdate{
 class User{
     _checkUser = async(id:number) =>{
         try{
-            const result = await connection("user").select().where({id});
+            const result = await connection("users").select().where({id});
 
             if(result[0] === undefined)
             {
@@ -87,6 +87,31 @@ class User{
     
             res.status(400).send(error.sqlMessage);
         }
+    }
+    delete = async(req:any, res:any) =>{
+        try{
+            const id = req.params.id;
+            const userExist = await this._checkUser(id);
+
+            if(userExist === false)
+            {
+                res.status(404).send("the user not exist");
+            }
+
+            // delete relashionship 
+            const result = await connection("user_role").delete().where({user_id: id});
+
+            // delete user
+            const query = await connection("users").delete().where({id});
+
+            res.status(200).send(`user deleted: ${query}`);
+        }
+
+        catch(error:any)
+        {
+            res.status(400).send(error.sqlMessage);
+        }
+
     }
 
     findAll = async (req:any, res:any) =>{

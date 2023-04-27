@@ -22,6 +22,10 @@ Router.put("/user/:id",adminAuth, async (req:any, res:any) =>{
     const user = new User();
     user.update(req, res);
 });
+Router.delete("/user/:id", async(req:any, res:any)=>{
+    const user = new User();
+    user.delete(req, res);
+})
 // role routes
 
 Router.get("/roles", async(req:any, res:any) =>{
